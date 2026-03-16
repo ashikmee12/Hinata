@@ -1,0 +1,4 @@
+python-telegram-bot==20.7
+feedparser==6.0.10
+Flask==2.3.3
+gunicorn==21.2.0
