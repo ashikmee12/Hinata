@@ -1485,8 +1485,8 @@ async def daily_stats_updater(context: ContextTypes.DEFAULT_TYPE):
 def main():
     """মেইন ফাংশন"""
     
-    # Flask চালু করুন (থ্রেডে)
-    threading.Thread(target=lambda: app_flask.run(host='0.0.0.0', port=8080, debug=False)).start()
+    # Flask চালু করুন (থ্রেডে) - DIFFERENT PORT
+    threading.Thread(target=lambda: app_flask.run(host='0.0.0.0', port=8081, debug=False)).start()
     
     # বট চালু করুন
     app = Application.builder().token(BOT_TOKEN).build()
@@ -1518,9 +1518,12 @@ def main():
     # বাটন হ্যান্ডলার
     app.add_handler(CallbackQueryHandler(button_handler))
     
-    # জব কিউ
+    # জব কিউ - সময় ঠিক করে দেওয়া
     app.job_queue.run_repeating(auto_poster, interval=600, first=10)
-    app.job_queue.run_daily(daily_stats_updater, time=datetime.time(hour=0, minute=0))
+    
+    # Daily stats - সঠিকভাবে সময় দেওয়া
+    from datetime import time as dt_time
+    app.job_queue.run_daily(daily_stats_updater, time=dt_time(hour=0, minute=0, second=0))
     
     logger.info("🤖 অ্যানিমেথিক আলট্রা বট v5.0 (Blogger API v3) চালু হয়েছে!")
     app.run_polling()
